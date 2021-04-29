@@ -1,0 +1,5 @@
+.venv
+dataset
+main/__pycache__
+requirements_local.txt
+models
