@@ -19,8 +19,8 @@ def get_time_min(start, end):
     return (end - start) / 60
 
 
-EPOCHS = 50
-BATCH_SIZE = 32
+EPOCHS = 400
+BATCH_SIZE = 64
 INPUT_SIZE = (224, 224)
 INPUT_SHAPE = (224, 224, 3)
 CLASSESS = 3
@@ -83,7 +83,7 @@ early_stopping_monitor = EarlyStopping(
 model = ResNet50(INPUT_SHAPE, CLASSESS)
 model = model.build()
 model.compile(
-    optimizer=SGD(0.01),
+    optimizer=SGD(momentum=0.9, nesterov=True),
     loss="categorical_crossentropy",
     metrics=["accuracy", "AUC"],
 )
@@ -124,22 +124,6 @@ score = model.evaluate_generator(
     generator=test_set, steps=(test_set.n // test_set.batch_size), verbose=1
 )
 print("[INFO] Accuracy: %.2f%%" % (score[1] * 100), "| Loss: %.5f" % (score[0]))
-
-print("[INFO] Sumarizando loss e accuracy para os datasets 'train' e 'test'")
-
-print(classifier.history)
-
-plt.style.use("ggplot")
-plt.figure()
-plt.plot(np.arange(0, EPOCHS), classifier.history["loss"], label="train_loss")
-plt.plot(np.arange(0, EPOCHS), classifier.history["val_loss"], label="val_loss")
-plt.plot(np.arange(0, EPOCHS), classifier.history["accuracy"], label="train_acc")
-plt.plot(np.arange(0, EPOCHS), classifier.history["val_accuracy"], label="val_acc")
-plt.title("Training Loss and Accuracy")
-plt.xlabel("Epoch #")
-plt.ylabel("Loss/Accuracy")
-plt.legend()
-plt.savefig("models/graphics/" + FILE_NAME + file_date + ".png", bbox_inches="tight")
 
 print("[INFO] Gerando imagem do modelo de camadas da CNN")
 plot_model(

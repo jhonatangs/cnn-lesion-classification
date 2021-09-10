@@ -1,5 +1,5 @@
 .venv
-dataset
 main/__pycache__
+models/
+cnn_lesion_classification.zip
 requirements_local.txt
-models
